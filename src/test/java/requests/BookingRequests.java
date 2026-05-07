@@ -62,4 +62,23 @@ public class BookingRequests {
             .delete("/booking/#{bookingId}")
             .header("Cookie", "token=#{authToken}") // pass our saved token
             .check(status().is(201)); // API Restful Booker returns status 201 (Created) on successful deletion
-}
+// 6. Partial Update Booking (PATCH) 
+    public static HttpRequestActionBuilder partialUpdateBooking = 
+        http("6. Partial Update (PATCH)")
+            .patch("/booking/#{bookingId}")
+            .header("Cookie", "token=#{authToken}") // pass our saved token
+            .body(StringBody("{" +
+                "\"firstname\": \"PatchedName\"," + // changing only first name
+                "\"lastname\": \"PatchedSurname\"" + // and last name. Other fields will remain unchanged.
+            "}"))
+            .check(status().is(200));
+
+    // 7. Search Booking with Query Parameters (GET) 
+    public static HttpRequestActionBuilder getBookingByFilter = 
+        http("7. Search Booking")
+            .get("/booking") // Gatling will substitute ?firstname=... itself
+            .queryParam("firstname", "#{firstname}") // and &lastname=... from our CSV file
+            .queryParam("lastname", "#{lastname}") 
+            .check(status().is(200));
+
+        }
