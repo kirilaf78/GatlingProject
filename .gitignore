@@ -1,0 +1,18 @@
+# Compiled classes and Gatling reports (most important!)
+target/
+
+# Logs
+*.log
+
+# IDE settings (VS Code, IntelliJ, Eclipse)
+.vscode/
+.idea/
+*.iml
+*.iws
+.classpath
+.project
+.settings/
+
+# System files 
+.DS_Store
+Thumbs.db
