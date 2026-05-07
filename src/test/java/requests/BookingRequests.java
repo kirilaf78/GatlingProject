@@ -37,4 +37,29 @@ public class BookingRequests {
         http("3. Get Booking")
             .get("/booking/#{bookingId}") // Insert the ID saved in the previous step
             .check(status().is(200));
+
+    // 4. Update Booking (PUT)
+    public static HttpRequestActionBuilder updateBooking = 
+        http("4. Update Booking")
+            .put("/booking/#{bookingId}")
+            .header("Cookie", "token=#{authToken}") // pass our saved token
+            .body(StringBody("{" +
+                "\"firstname\": \"#{firstname}\"," + 
+                "\"lastname\": \"#{lastname}\"," +   
+                "\"totalprice\": 999," + 
+                "\"depositpaid\": false,"+
+                "\"bookingdates\": {" +
+                    "\"checkin\": \"2025-05-01\"," +
+                    "\"checkout\": \"2025-05-10\"" +
+                "}," +
+                "\"additionalneeds\": \"Dinner\"" + // changed Breakfast to Dinner
+            "}"))
+            .check(status().is(200));
+
+    // 5. Delete Booking (DELETE)
+    public static HttpRequestActionBuilder deleteBooking = 
+        http("5. Delete Booking")
+            .delete("/booking/#{bookingId}")
+            .header("Cookie", "token=#{authToken}") // pass our saved token
+            .check(status().is(201)); // API Restful Booker returns status 201 (Created) on successful deletion
 }

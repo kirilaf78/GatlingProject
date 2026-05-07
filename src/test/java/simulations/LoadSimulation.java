@@ -6,23 +6,25 @@ import static io.gatling.javaapi.http.HttpDsl.*;
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
 
-import scenarios.BookingScenario; // Import our scenario
+import scenarios.BookingScenario;
 
 public class LoadSimulation extends Simulation {
 
-    // 1. Basic HTTP configuration (common to all requests)
     HttpProtocolBuilder httpProtocol = http
         .baseUrl("https://restful-booker.herokuapp.com")
         .acceptHeader("application/json")
         .contentTypeHeader("application/json");
 
-    // 2. Injection Profile
     public LoadSimulation() {
         setUp(
-            // Take our ready scenario from the BookingScenario class
-            BookingScenario.defaultLoad.injectOpen(
-                atOnceUsers(1),         // Warm-up: 1 user makes requests immediately
-                rampUsers(5).during(10) // Then another 5 users gradually connect within 10 seconds
+            // 80% trafic (8 users gradually connect within 10 seconds)
+            BookingScenario.browsingLoad.injectOpen(
+                rampUsers(8).during(10)
+            ),
+            
+            // 20% trafic (2 users gradually connect within 10 seconds)
+            BookingScenario.fullCrudLoad.injectOpen(
+                rampUsers(2).during(10)
             )
         ).protocols(httpProtocol);
     }
